@@ -14,9 +14,12 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:true
     },
+    profilePic:{
+        type:String
+    },
     friends:[
        { type:mongoose.Schema.Types.ObjectId,
-        ref:"Users"}
+        ref:"User"}
     ],
 onBoarded:{
     type:Boolean,

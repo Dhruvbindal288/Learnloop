@@ -1,6 +1,7 @@
 import express from 'express'
 import connectDb from './src/db/db.js'
 import authRouter from './src/routes/user.auth.route.js'
+import userRouter from './src/routes/user.request.route.js'
 import cookieparser from 'cookie-parser'
 import dotenv from 'dotenv'
 
@@ -13,6 +14,7 @@ dotenv.config()
 app.use(express.json());
 app.use(cookieparser())
 app.use('/api/auth',authRouter)
+app.use('/api/user',userRouter)
 
 
 app.listen(3000,()=>{
