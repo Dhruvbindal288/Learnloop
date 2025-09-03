@@ -114,4 +114,48 @@ export const rejectRequest=async(req,res)=>{
 } 
 
 
-export const getusers=async()=>{}
+
+
+export const getUsers = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    
+    const currentUser = await User.findById(userId).select("friends");
+
+  
+    const users = await User.find({
+      _id: { $ne: userId, $nin: currentUser.friends }, 
+      onBoarded: true,
+    }).select("-password");
+
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+export const getFriends = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+   
+    const user = await User.findById(userId)
+      .populate("friends", "fullName email learningSkill teachingSkill") 
+      .select("friends");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      friends: user.friends,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
