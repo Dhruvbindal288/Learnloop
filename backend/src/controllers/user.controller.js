@@ -5,9 +5,9 @@ import Request from "../models/request.model.js";
 export const onBoard = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { learningSkill, teachingSkill } = req.body;
+    const { learningSkill=[], teachingSkill=[] } = req.body;
 
-    if (!learningSkill || !teachingSkill) {
+    if (!learningSkill.length || !teachingSkill.length) {
       return res.status(400).json({ message: "At least add one skill in both fields" });
     }
 
@@ -22,7 +22,7 @@ export const onBoard = async (req, res) => {
         onBoarded:true
       },
       { new: true } 
-    ).select("-passoword");
+    ).select("-password");
 
     res.status(200).json({
       message: "Skills updated successfully",
@@ -159,3 +159,16 @@ export const getFriends = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+export const getRequests=async(req,res)=>{
+  try {
+    const userId=req.user._id;
+    const requests=await Request.find({ receiver: userId ,status: "pending" }).populate("sender", 'fullName teachingSkill learningSkill');
+    res.status(200).json({ requests });
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}

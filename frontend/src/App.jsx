@@ -8,6 +8,7 @@ import {Routes,Route}from 'react-router-dom'
 import useAuth from "./hooks/useAuth";
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Notification from './pages/Notification'
 function App() {
 
   const {authUser,isLoading}=useAuth()
@@ -22,6 +23,7 @@ function App() {
             <Route path='/signup' element={authUser? <Home/>:<Signup/>}/>
                 <Route path='/browse' element={authUser? <BrowseSkills/>:<Signup/>}/>
                  <Route path='/onboard' element={authUser? <OnBoardPage/>:<Login/>}/>
+                  <Route path='/notifications' element={authUser? <Notification/>:<Login/>}/>
       </Routes>
       <Footer></Footer>
 

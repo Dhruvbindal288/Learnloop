@@ -6,44 +6,39 @@ import axiosInstance from "../lib/axios";
 
 function OnBoardPage() {
   const { authUser } = useAuth();
+  const queryClient = useQueryClient();
 
   const [onboardData, setOnboardData] = useState({
-    learningSkills: [],
-    teachingSkills: [],
+    learningSkill: "",
+    teachingSkill: "",
   });
 
-  const [learningInput, setLearningInput] = useState("");
-  const [teachingInput, setTeachingInput] = useState("");
-  const queryClient=useQueryClient();
-  const{mutate,data, isPending}=useMutation({
-     mutationFn:async(data)=>{
-        const response=await axiosInstance.post('/user/on-board',data)
-return response.data
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("/user/on-board", data);
+      return response.data;
     },
-    onSuccess:()=>{ queryClient.invalidateQueries(["authUser"]);}
-  })
-
-  const handleAddSkill = (type) => {
-    if (type === "learning" && learningInput.trim()) {
-      setOnboardData((prev) => ({
-        ...prev,
-        learningSkills: [...prev.learningSkills, learningInput.trim()],
-      }));
-      setLearningInput("");
-    }
-    if (type === "teaching" && teachingInput.trim()) {
-      setOnboardData((prev) => ({
-        ...prev,
-        teachingSkills: [...prev.teachingSkills, teachingInput.trim()],
-      }));
-      setTeachingInput("");
-    }
-  };
+    onSuccess: () => {
+      queryClient.invalidateQueries(["authUser"]);
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   mutate(onboardData)
-   
+
+  
+    const formattedData = {
+      learningSkill: onboardData.learningSkill
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      teachingSkill: onboardData.teachingSkill
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    };
+
+    mutate(formattedData);
   };
 
   return (
@@ -54,7 +49,7 @@ return response.data
         </h2>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
-        
+          
           <div>
             <label
               htmlFor="fullName"
@@ -77,81 +72,46 @@ return response.data
               htmlFor="learningSkill"
               className="block text-sm font-medium text-gray-600 mb-1"
             >
-              Learning Skills
+              Learning Skills (comma separated)
             </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="learningSkill"
-                placeholder="Enter a skill"
-                value={learningInput}
-                onChange={(e) => setLearningInput(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              />
-              <button
-                type="button"
-                onClick={() => handleAddSkill("learning")}
-                className="px-4 bg-green-500 text-white rounded-xl hover:bg-green-600"
-              >
-                Add
-              </button>
-            </div>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {onboardData.learningSkills.map((skill, index) => (
-                <li
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 rounded-xl text-sm text-gray-700"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+            <input
+              type="text"
+              id="learningSkill"
+              placeholder="e.g. React, Node.js, Python"
+              value={onboardData.learningSkill}
+              onChange={(e) =>
+                setOnboardData({ ...onboardData, learningSkill: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            />
           </div>
 
-          
           <div>
             <label
               htmlFor="teachingSkill"
               className="block text-sm font-medium text-gray-600 mb-1"
             >
-              Teaching Skills
+              Teaching Skills (comma separated)
             </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="teachingSkill"
-                placeholder="Enter a skill"
-                value={teachingInput}
-                onChange={(e) => setTeachingInput(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              />
-              <button
-                type="button"
-                onClick={() => handleAddSkill("teaching")}
-                className="px-4 bg-green-500 text-white rounded-xl hover:bg-green-600"
-              >
-                Add
-              </button>
-            </div>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {onboardData.teachingSkills.map((skill, index) => (
-                <li
-                  key={index}
-                  className="px-3 py-1 bg-purple-100 rounded-xl text-sm text-gray-700"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+            <input
+              type="text"
+              id="teachingSkill"
+              placeholder="e.g. JavaScript, SQL, Data Analysis"
+              value={onboardData.teachingSkill}
+              onChange={(e) =>
+                setOnboardData({ ...onboardData, teachingSkill: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            />
           </div>
 
           
           <button
             type="submit"
             className="w-full py-2 rounded-xl bg-blue-500 text-white font-semibold hover:bg-blue-600 transition duration-300 shadow-md"
-          disabled={isPending}
+            disabled={isPending}
           >
-           {isPending?'Saving your data..':"Save & Continue"} 
+            {isPending ? "Saving your data..." : "Save & Continue"}
           </button>
         </form>
       </div>

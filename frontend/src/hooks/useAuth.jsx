@@ -12,4 +12,4 @@ const { data: authUser, isLoading, isError, error }= useQuery({
 return {authUser,isLoading,isError,error}
 }
 
-export default useAuth
+export default useAuth;

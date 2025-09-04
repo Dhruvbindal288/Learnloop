@@ -43,6 +43,7 @@ mutate(formData)
               placeholder="Enter your full name"
               value={formData.fullName}
               onChange={(e)=>{setformData({...formData,fullName:e.target.value})}}
+              required
             />
           </div>
 
@@ -62,6 +63,7 @@ mutate(formData)
               placeholder="Enter your email"
                value={formData.email}
               onChange={(e)=>{setformData({...formData,email:e.target.value})}}
+               required
             />
           </div>
 
@@ -81,6 +83,7 @@ mutate(formData)
               placeholder="Enter your password"
                value={formData.password}
               onChange={(e)=>{setformData({...formData,password:e.target.value})}}
+               required
             />
           </div>
 

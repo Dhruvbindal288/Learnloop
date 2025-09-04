@@ -17,7 +17,7 @@ function Navbar() {
           <ul className="hidden md:flex items-center space-x-10 font-medium text-gray-700">
       <NavLink to='/'><li className="hover:text-indigo-600 cursor-pointer">Home</li></NavLink>      
          <NavLink to='/browse'> <li className="hover:text-indigo-600 cursor-pointer">Browse Skills</li></NavLink>  
-            <li className="hover:text-indigo-600 cursor-pointer">Notifications</li>
+         <NavLink to='/notifications'><li className="hover:text-indigo-600 cursor-pointer">Notifications</li></NavLink>   
             <li className="hover:text-indigo-600 cursor-pointer">Friends</li>
           </ul>
 
