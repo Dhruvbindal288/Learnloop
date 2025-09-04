@@ -6,13 +6,7 @@ import axiosInstance from '../lib/axios';
 function Signup() {
   const queryClient=useQueryClient();
 const[formData,setformData]=useState({fullName:"",email:'',password:''});
-useQuery({
-  queryKey:["authUser"],
-  queryFn:async()=>{
-    const response=await axiosInstance.get('/auth/me');
-    return response.data
-  },retry:false
-})
+
 const{data,isPending,mutate}= useMutation({
   mutationFn:async(formData)=>{
     const response=await axiosInstance.post('/auth/signup',formData)
