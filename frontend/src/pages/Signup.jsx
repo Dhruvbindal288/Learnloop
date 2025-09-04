@@ -1,6 +1,30 @@
-import React from 'react'
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react'
+import { useQuery,useMutation,useQueryClient } from '@tanstack/react-query';
 
+import axiosInstance from '../lib/axios';
 function Signup() {
+  const queryClient=useQueryClient();
+const[formData,setformData]=useState({fullName:"",email:'',password:''});
+useQuery({
+  queryKey:["authUser"],
+  queryFn:async()=>{
+    const response=await axiosInstance.get('/auth/me');
+    return response.data
+  },retry:false
+})
+const{data,isPending,mutate}= useMutation({
+  mutationFn:async(formData)=>{
+    const response=await axiosInstance.post('/auth/signup',formData)
+  return response.data;
+  },
+  onSuccess:()=>{queryClient.invalidateQueries({ queryKey: ['authUser'] })} 
+})
+
+const handleSubmit=(e)=>{
+   e.preventDefault();
+mutate(formData)
+}
   return (
      <div className="h-screen flex justify-center items-center bg-blue-200 ">
       <div className="w-96 bg-white p-8 rounded-2xl shadow-2xl">
@@ -8,7 +32,7 @@ function Signup() {
         Welcome To LearnLoop
         </h2>
         
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleSubmit}>
          
           <div>
             <label
@@ -23,6 +47,8 @@ function Signup() {
               name="fullname"
               id="fullName"
               placeholder="Enter your full name"
+              value={formData.fullName}
+              onChange={(e)=>{setformData({...formData,fullName:e.target.value})}}
             />
           </div>
 
@@ -40,6 +66,8 @@ function Signup() {
               name="email"
               id="email"
               placeholder="Enter your email"
+               value={formData.email}
+              onChange={(e)=>{setformData({...formData,email:e.target.value})}}
             />
           </div>
 
@@ -57,6 +85,8 @@ function Signup() {
               name="password"
               id="password"
               placeholder="Enter your password"
+               value={formData.password}
+              onChange={(e)=>{setformData({...formData,password:e.target.value})}}
             />
           </div>
 
@@ -64,8 +94,9 @@ function Signup() {
           <button
             type="submit"
             className="w-full py-2 rounded-xl bg-blue-500 text-white font-semibold hover:bg-blue-600 transition duration-300 shadow-md"
-          >
-           Signup
+         disabled={isPending}
+        >
+          {isPending ? "Signing up..." : "Signup"}
           </button>
         </form>
       </div>
