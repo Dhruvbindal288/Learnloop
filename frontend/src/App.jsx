@@ -2,6 +2,8 @@ import React from 'react'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Home from './pages/Home'
+import BrowseSkills from './pages/BrowseSkills'
+import OnBoardPage from './pages/OnBoardPage'
 import {Routes,Route}from 'react-router-dom'
 import useAuth from "./hooks/useAuth";
 function App() {
@@ -14,6 +16,8 @@ function App() {
         <Route path='/' element={<Home/>}/>
           <Route path='/login' element={authUser? <Home/>:<Login/>}/>
             <Route path='/signup' element={authUser? <Home/>:<Signup/>}/>
+                <Route path='/browse' element={authUser? <BrowseSkills/>:<Signup/>}/>
+                 <Route path='/onboard' element={authUser? <OnBoardPage/>:<Signup/>}/>
       </Routes>
       
 
