@@ -4,11 +4,11 @@ import protectRoute from '../middlewares/protectRoute.middleware.js';
 const router=express.Router();
  
 
-router.post('/user/on-board',protectRoute,onBoard);
-router.post('/user/send-request/:id',protectRoute,sendRequest)
-router.post('/user/accept-request/:id',protectRoute,acceptRequest)
-router.post('/user/reject-request/:id',protectRoute,rejectRequest)
-router.get('/user/allusers',protectRoute,getUsers)
-router.get('/user/friends',protectRoute,getFriends)
+router.post('/on-board',protectRoute,onBoard);
+router.post('/send-request/:id',protectRoute,sendRequest)
+router.post('/accept-request/:id',protectRoute,acceptRequest)
+router.post('/reject-request/:id',protectRoute,rejectRequest)
+router.get('/allusers',protectRoute,getUsers)
+router.get('/friends',protectRoute,getFriends)
 
 export default router;

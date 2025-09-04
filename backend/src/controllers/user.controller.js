@@ -126,7 +126,7 @@ export const getUsers = async (req, res) => {
   
     const users = await User.find({
       _id: { $ne: userId, $nin: currentUser.friends }, 
-      onBoarded: true,
+      // onBoarded: true,
     }).select("-password");
 
     return res.status(200).json(users);
