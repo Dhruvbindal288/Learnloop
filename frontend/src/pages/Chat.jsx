@@ -12,7 +12,6 @@ function Chat() {
 
   const { data: messages = [], isLoading } = useMessages(selectedFriend?._id);
 
-  // ✅ Listen for incoming messages
   React.useEffect(() => {
     if (!selectedFriend) return;
 
@@ -30,7 +29,6 @@ function Chat() {
     };
   }, [selectedFriend, queryClient]);
 
-  // ✅ Send message handler
   const handleSend = () => {
     const input = document.getElementById("chatInput");
     const text = input.value.trim();
@@ -46,19 +44,19 @@ function Chat() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)] pt-16">
+    <div className="flex h-[calc(100vh-64px)] pt-16 bg-gradient-to-br from-indigo-50 via-indigo-100 to-blue-50">
       {/* Sidebar */}
       <div
         className={`${
           selectedFriend
             ? "hidden md:block w-1/3 lg:w-1/4" 
             : "block w-full md:w-1/3 lg:w-1/4"
-        } border-r`}
+        } border-r bg-white shadow-sm`}
       >
         <Sidebar onSelectFriend={setSelectedFriend} />
       </div>
 
-      
+      {/* Chat Area */}
       <div
         className={`${
           selectedFriend
@@ -66,14 +64,14 @@ function Chat() {
             : "hidden md:flex flex-col flex-1"
         }`}
       >
+        
         {selectedFriend ? (
           <>
-            
-            <div className="flex items-center gap-3 p-4 border-b shadow-sm">
-              
+           
+            <div className="flex items-center gap-3 p-4 border-b shadow-sm bg-gradient-to-r from-[#0e7490] via-[#3b82f6] to-[#4f46e5]">
               <button
                 onClick={() => setSelectedFriend(null)}
-                className="md:hidden px-3 py-1 bg-gray-200 rounded"
+                className="md:hidden px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
               >
                 Back
               </button>
@@ -81,13 +79,13 @@ function Chat() {
               <div className="w-10 h-10 flex items-center justify-center rounded-full bg-indigo-500 text-white font-semibold">
                 {selectedFriend.fullName?.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-lg font-bold text-gray-800">
+              <h2 className="text-lg font-bold text-black-800">
                 {selectedFriend.fullName}
               </h2>
             </div>
 
-           
-            <div className="flex-1 p-4 overflow-y-auto space-y-2">
+            
+            <div className="flex-1 p-4 overflow-y-auto space-y-2 ">
               {isLoading ? (
                 <p className="text-gray-500">Loading messages...</p>
               ) : messages.length === 0 ? (
@@ -98,10 +96,10 @@ function Chat() {
                 messages.map((msg) => (
                   <div
                     key={msg._id}
-                    className={`p-2 rounded max-w-xs ${
+                    className={`p-2 rounded max-w-2xs break-words ${
                       msg.senderId === selectedFriend._id
-                        ? "bg-gray-200 text-left"
-                        : "bg-blue-200 ml-auto text-left"
+                        ? "bg-blue-400 text-left"
+                        : "bg-blue-500 text-white ml-auto text-left"
                     }`}
                   >
                     {msg.message}
@@ -110,13 +108,13 @@ function Chat() {
               )}
             </div>
 
-            
-            <div className="p-4 border-t flex items-center gap-2">
+          
+            <div className="p-4 border-t flex items-center gap-2 bg-gray-100">
               <input
                 id="chatInput"
                 type="text"
                 placeholder="Type a message..."
-                className="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -126,14 +124,14 @@ function Chat() {
               />
               <button
                 onClick={handleSend}
-                className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600"
+                className="bg-indigo-500 text-white px-4 py-2 rounded-full hover:bg-indigo-600 transition"
               >
                 Send
               </button>
             </div>
           </>
         ) : (
-          <p className="text-gray-500 h-full flex items-center justify-center">
+          <p className="text-gray-500 h-full flex items-center justify-center text-lg">
             Select a friend to see messages
           </p>
         )}
