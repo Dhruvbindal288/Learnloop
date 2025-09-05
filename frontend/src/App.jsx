@@ -12,7 +12,7 @@ import Notification from "./pages/Notification";
 import Chat from "./pages/Chat";
 import { Toaster } from "react-hot-toast";
 import socket from "./lib/socket";
-
+import png from "./assets/404.png";
 function App() {
   const { authUser, isLoading } = useAuth();
 
@@ -30,20 +30,40 @@ function App() {
       <Navbar />
       <Toaster />
       <Routes>
-        {/* Public route */}
+       
         <Route path="/" element={<Home />} />
 
-        {/* Auth routes */}
-        <Route
-          path="/login"
-          element={authUser ? <Navigate to="/" /> : <Login />}
-        />
-        <Route
-          path="/signup"
-          element={authUser ? <Navigate to="/" /> : <Signup />}
-        />
+     
+       <Route
+  path="/login"
+  element={
+    authUser ? (
+      authUser.onBoarded ? (
+        <Navigate to="/" />
+      ) : (
+        <Navigate to="/onboard" />
+      )
+    ) : (
+      <Login />
+    )
+  }
+/>
+<Route
+  path="/signup"
+  element={
+    authUser ? (
+      authUser.onBoarded ? (
+        <Navigate to="/" />
+      ) : (
+        <Navigate to="/onboard" />
+      )
+    ) : (
+      <Signup />
+    )
+  }
+/>
 
-        {/* Onboard check */}
+       
         <Route
           path="/onboard"
           element={
@@ -59,7 +79,7 @@ function App() {
           }
         />
 
-        {/* Protected routes */}
+      
         <Route
           path="/browse"
           element={
@@ -100,6 +120,27 @@ function App() {
             ) : (
               <Navigate to="/login" />
             )
+          }
+        />
+        <Route
+          path="*"
+          element={
+            
+            
+ <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh", 
+      }}
+    >
+      <img
+        src={png}
+        alt="Page Not Found"
+        style={{ width: "60%", height: "auto" ,paddingTop:"150px"}} 
+      />
+    </div>
           }
         />
       </Routes>
