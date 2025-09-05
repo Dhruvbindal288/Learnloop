@@ -1,6 +1,6 @@
-import React from "react";
 import Features from "../components/Features";
 import SplitText from "../lib/SplitText";
+import {NavLink} from'react-router-dom'
 function Home() {
   return (
     <div className="min-h-[90vh] w-full bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 p-8 md:p-12 ">
@@ -42,10 +42,10 @@ function Home() {
           Connect with people, share your knowledge, and discover new skills from a global community.
         </p>
 
-     
-        <button className="mt-6 px-6 md:px-10 py-3 text-white bg-amber-300  font-bold rounded-full shadow-lg hover:bg-amber-400 hover:scale-105 transition-transform duration-300">
+     <NavLink to='/browse'> <button className="mt-6 px-6 md:px-10 py-3 text-white bg-amber-300  font-bold rounded-full shadow-lg hover:bg-amber-400 hover:scale-105 transition-transform duration-300">
           Browse Skills
-        </button>
+        </button></NavLink>
+       
       </div>
 <Features></Features>
 

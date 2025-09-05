@@ -8,8 +8,7 @@ import messageRouter from "./src/routes/message.route.js";
 import cookieparser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import Message from "./src/models/message.model.js"; // ✅ import your Message model
-import User from "./src/models/user.model.js"; // optional, for validation
+import Message from "./src/models/message.model.js";
 
 dotenv.config();
 
@@ -32,7 +31,7 @@ app.use(
 app.use(express.json());
 app.use(cookieparser());
 
-// ✅ routes
+// ✅ Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/messages", messageRouter);
@@ -40,34 +39,45 @@ app.use("/api/messages", messageRouter);
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
 
-  // join personal room
+  // Join personal room
   socket.on("join", (userId) => {
     socket.join(userId);
     console.log(`User ${userId} joined their room`);
   });
 
-  // ✅ send message handler
+  // Send message
   socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
     try {
       if (!message?.trim()) return;
 
-      // 1️⃣ Save to DB
-      const newMessage = await Message.create({
-        senderId,
-        receiverId,
-        message,
-      });
+      const newMessage = await Message.create({ senderId, receiverId, message });
 
-      // 2️⃣ Emit to receiver room
       io.to(receiverId).emit("receiveMessage", newMessage);
-
-      // 3️⃣ Optionally emit back to sender (so their UI syncs)
       io.to(senderId).emit("receiveMessage", newMessage);
 
-      console.log("Message saved & sent:", newMessage);
+      console.log("Message sent:", newMessage);
     } catch (error) {
-      console.error("❌ Error sending message:", error.message);
+      console.error("Error sending message:", error.message);
     }
+  });
+
+  // ----------------------
+  // WebRTC Signaling
+  // ----------------------
+
+  // User A calls User B
+  socket.on("call-user", ({ offer, to }) => {
+    io.to(to).emit("call-made", { offer, from: socket.id });
+  });
+
+  // User B answers
+  socket.on("make-answer", ({ answer, to }) => {
+    io.to(to).emit("answer-made", { answer });
+  });
+
+  // ICE candidate exchange
+  socket.on("ice-candidate", ({ candidate, to }) => {
+    io.to(to).emit("ice-candidate", { candidate });
   });
 
   socket.on("disconnect", () => {
@@ -75,7 +85,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ start server
+// Start server
 const PORT = 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server started on port ${PORT}`);
