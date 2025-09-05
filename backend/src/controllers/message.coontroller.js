@@ -1,4 +1,4 @@
-import Message from "../models/message.model";
+import Message from "../models/message.model.js";
 export const sendMessage=async(req,res)=>{
     try {
           const senderId = req.user._id;
