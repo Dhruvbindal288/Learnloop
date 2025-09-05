@@ -7,7 +7,7 @@ function Sidebar({onSelectFriend}) {
   if (isLoading) return <p className="p-4">Loading friends...</p>;
 
   return (
-   <div className="w-64 h-[calc(100vh-130px)] border-r bg-white shadow-sm flex flex-col">
+   <div className="h-[calc(100vh-130px)] border-r bg-white shadow-sm flex flex-col">
   <h2 className="text-xl font-bold text-gray-800 p-5.5 border-b">Friends</h2>
 
   <ul className="flex-1 overflow-y-auto ">
