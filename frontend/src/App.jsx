@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import socket from "./lib/socket";
 import png from "./assets/404.png";
 import VideoCallPage from "./pages/VideoCallPage";
+import Profile from "./pages/Profile";
 function App() {
   const { authUser, isLoading } = useAuth();
 
@@ -137,6 +138,22 @@ function App() {
     )
   }
 />
+
+<Route
+  path="/profile"
+  element={
+    authUser ? (
+      authUser.onBoarded ? (
+        <Profile />
+      ) : (
+        <Navigate to="/onboard" />
+      )
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
+
         <Route
           path="*"
           element={

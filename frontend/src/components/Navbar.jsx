@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-
+import useAuth from "../hooks/useAuth";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
+const {authUser}=useAuth()
   return (
     <nav className="bg-gradient-to-r
 from-[#33a7c7]
@@ -22,6 +22,8 @@ to-[#807af5] shadow-md fixed w-full z-20">
          <NavLink to='/browse'> <li className="hover:text-indigo-700 cursor-pointer">Browse Skills</li></NavLink>  
          <NavLink to='/notifications'><li className="hover:text-indigo-700 cursor-pointer">Notifications</li></NavLink>   
            <NavLink to='/chat'><li className="hover:text-indigo-700 cursor-pointer">Chat</li></NavLink> 
+            <NavLink to={authUser?'/profile':'/login'}><li className="hover:text-indigo-700 cursor-pointer">{authUser?'Profile':'Login'}</li></NavLink> 
+          
           </ul>
 
           
