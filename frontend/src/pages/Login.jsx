@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
+import toast from 'react-hot-toast';
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -17,7 +18,11 @@ function Login() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["authUser"]);
+      toast.success('Login Successfully')
     },
+    onError:(error)=>{
+      toast.error(error.response.data.message)
+    }
   });
 
   const handleSubmit = (e) => {

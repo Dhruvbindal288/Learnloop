@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
-import { useQuery,useMutation,useQueryClient } from '@tanstack/react-query';
-
+import { useMutation,useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import axiosInstance from '../lib/axios';
+
 function Signup() {
   const queryClient=useQueryClient();
 const[formData,setformData]=useState({fullName:"",email:'',password:''});
@@ -12,8 +13,14 @@ const{data,isPending,mutate}= useMutation({
     const response=await axiosInstance.post('/auth/signup',formData)
   return response.data;
   },
-  onSuccess:()=>{queryClient.invalidateQueries({ queryKey: ['authUser'] })} 
-})
+  onSuccess:()=>{queryClient.invalidateQueries({ queryKey: ['authUser'] })
+toast.success("Signup Successfully")
+} ,
+onError:(error)=>{
+  toast.error(error.response.data.message)
+}
+});
+
 
 const handleSubmit=(e)=>{
    e.preventDefault();

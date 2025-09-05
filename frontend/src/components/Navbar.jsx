@@ -18,7 +18,7 @@ function Navbar() {
       <NavLink to='/'><li className="hover:text-indigo-600 cursor-pointer">Home</li></NavLink>      
          <NavLink to='/browse'> <li className="hover:text-indigo-600 cursor-pointer">Browse Skills</li></NavLink>  
          <NavLink to='/notifications'><li className="hover:text-indigo-600 cursor-pointer">Notifications</li></NavLink>   
-            <li className="hover:text-indigo-600 cursor-pointer">Friends</li>
+           <NavLink to='/chat'><li className="hover:text-indigo-600 cursor-pointer">Chat</li></NavLink> 
           </ul>
 
           

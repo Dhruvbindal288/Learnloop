@@ -37,11 +37,10 @@ export const onBoard = async (req, res) => {
 
 export const sendRequest = async (req, res) => {
   try {
-    const senderId = req.user._id; 
-
+    const senderId = req.user._id;
     const { id: receiverId } = req.params;
 
-    if (senderId.toString() === receiverId) {
+    if (senderId.toString() === receiverId.toString()) {
       return res.status(400).json({ message: "You cannot send request to yourself" });
     }
 
@@ -50,17 +49,22 @@ export const sendRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const request = await Request.create({
-      senderId,
-      receiverId
-    });
+   
+    const existing = await Request.findOne({ senderId, receiverId, status: "pending" });
+    if (existing) {
+      return res.status(400).json({ message: "Request already sent" });
+    }
 
-    return res.status(201).json({ message: "Request sent successfully" ,request});
+    const request = await Request.create({ senderId, receiverId });
+
+    console.log("New request created:", request);
+
+    return res.status(201).json({ message: "Request sent successfully", request });
   } catch (error) {
-    console.error(error);
+    console.error("Error in sendRequest:", error);
     return res.status(500).json({ message: "Server error" });
   }
-};
+};  
 
 
 export const acceptRequest = async (req, res) => {
@@ -165,7 +169,7 @@ export const getFriends = async (req, res) => {
 export const getRequests=async(req,res)=>{
   try {
     const userId=req.user._id;
-    const requests=await Request.find({ receiver: userId ,status: "pending" }).populate("sender", 'fullName teachingSkill learningSkill');
+    const requests=await Request.find({ receiverId: userId ,status: "pending" }).populate("senderId", 'fullName teachingSkill learningSkill');
     res.status(200).json({ requests });
   } catch (error) {
     console.error("Error fetching requests:", error);

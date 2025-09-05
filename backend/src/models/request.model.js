@@ -10,7 +10,7 @@ const requestSchema=new mongoose.Schema({
     status:{
         type:String,
         default:"pending",
-        enums:["pending","accepted","rejected"]
+        enum:["pending","accepted","rejected"]
     }
 },{timestamps:true})
 

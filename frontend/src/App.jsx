@@ -9,6 +9,8 @@ import useAuth from "./hooks/useAuth";
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Notification from './pages/Notification'
+import Chat from './pages/Chat'
+import { Toaster } from 'react-hot-toast';
 function App() {
 
   const {authUser,isLoading}=useAuth()
@@ -16,6 +18,7 @@ function App() {
   return (
     <div>
       <Navbar></Navbar>
+       <Toaster />
       <Routes>
 
         <Route path='/' element={<Home/>}/>
@@ -24,6 +27,7 @@ function App() {
                 <Route path='/browse' element={authUser? <BrowseSkills/>:<Signup/>}/>
                  <Route path='/onboard' element={authUser? <OnBoardPage/>:<Login/>}/>
                   <Route path='/notifications' element={authUser? <Notification/>:<Login/>}/>
+                  <Route path='/chat' element={authUser? <Chat/>:<Login/>}/>
       </Routes>
       <Footer></Footer>
 

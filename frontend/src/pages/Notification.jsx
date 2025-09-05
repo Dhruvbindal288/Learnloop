@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
 import axiosInstance from "../lib/axios";
 
 function Notification() {
@@ -9,6 +8,7 @@ function Notification() {
     queryKey: ["requests"],
     queryFn: async () => {
       const response = await axiosInstance.get("/user/requests");
+      console.log(response.data.requests)
       return response.data.requests; 
     },
   });
@@ -31,7 +31,7 @@ function Notification() {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["requests"]);
+      queryClient.invalidateQueries(["requests"] );
     },
   });
 
@@ -58,7 +58,7 @@ function Notification() {
             >
               <div>
                 <p className="text-gray-800 font-semibold">
-                  {req.sender.fullName}
+                  {req.senderId?.fullName}
                 </p>
                 <p className="text-sm text-gray-500">
                   sent you a friend request
@@ -69,7 +69,7 @@ function Notification() {
                 <button
                   onClick={() => acceptMutation.mutate(req._id)}
                   disabled={acceptMutation.isPending}
-                  className="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition disabled:opacity-50"
+                  className="px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-green-600 transition disabled:opacity-50"
                 >
                   {acceptMutation.isPending ? "Accepting..." : "Accept"}
                 </button>

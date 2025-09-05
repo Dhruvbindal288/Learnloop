@@ -1,6 +1,7 @@
 import React from "react";
-import { useQuery,useMutation } from "@tanstack/react-query";
+import { useQuery,useMutation ,useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
+import toast from 'react-hot-toast';
 
 function BrowseSkills() {
   const { data: users = [], isLoading } = useQuery({
@@ -10,11 +11,18 @@ function BrowseSkills() {
       return response.data;
     },
   });
-
+const queryClient=useQueryClient()
   const {mutate,isPending}=useMutation({
     mutationFn:async(id)=>{
       const response=await axiosInstance.post(`user/send-request/${id}`);
       return response.data
+    },
+    onSuccess:()=>{toast.success("Request sent successfully"),
+queryClient.invalidateQueries(['requests']);
+
+    },
+    onError:(error)=>{
+      toast.error(error.response.data.message)
     }
   })
 

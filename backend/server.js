@@ -5,6 +5,7 @@ import userRouter from './src/routes/user.request.route.js'
 import cookieparser from 'cookie-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import messageRouter from './src/routes/message.route.js'
 const app=express()
 
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cookieparser())
 app.use('/api/auth',authRouter)
 app.use('/api/user',userRouter)
+app.use('/api/messages',messageRouter)
 
 
 app.listen(3000,()=>{
