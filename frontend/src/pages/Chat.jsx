@@ -1,16 +1,55 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import useMessages from "../hooks/useMessages";
+import { useQueryClient } from "@tanstack/react-query";
+import socket from "../lib/socket"; // ✅ import socket instance
+import useAuth from "../hooks/useAuth";
 
 function Chat() {
   const [selectedFriend, setSelectedFriend] = React.useState(null);
+  const { authUser } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: messages = [], isLoading } = useMessages(
     selectedFriend?._id
   );
 
+  // ✅ Listen for incoming messages via socket
+  React.useEffect(() => {
+    if (!selectedFriend) return;
+
+    socket.on("receiveMessage", (newMessage) => {
+      // only refresh if the new msg belongs to the selected friend
+      if (
+        newMessage.senderId === selectedFriend._id ||
+        newMessage.receiverId === selectedFriend._id
+      ) {
+        queryClient.invalidateQueries(["messages", selectedFriend._id]);
+      }
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, [selectedFriend, queryClient]);
+
+  // ✅ Send message handler
+  const handleSend = () => {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    socket.emit("sendMessage", {
+      senderId: authUser._id,
+      receiverId: selectedFriend._id,
+      message: text,
+    });
+
+    input.value = ""; // clear input
+  };
+
   return (
-    <div className="flex h-[calc(100vh-64px)] pt-16"> 
+    <div className="flex h-[calc(100vh-64px)] pt-16">
       {/* Sidebar */}
       <Sidebar onSelectFriend={setSelectedFriend} />
 
@@ -43,7 +82,7 @@ function Chat() {
                     className={`p-2 rounded max-w-xs ${
                       msg.senderId === selectedFriend._id
                         ? "bg-gray-200 text-left"
-                        : "bg-blue-200 ml-auto text-right"
+                        : "bg-blue-200 ml-auto text-left"
                     }`}
                   >
                     {msg.message}
@@ -55,11 +94,23 @@ function Chat() {
             {/* Input box fixed at bottom */}
             <div className="p-4 border-t flex items-center gap-2">
               <input
+                id="chatInput"
                 type="text"
+              
                 placeholder="Type a message..."
                 className="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
-              <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600">
+               onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); 
+      handleSend();
+    }
+  }}
+             />
+              <button
+                onClick={handleSend}
+              
+                className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600"
+              >
                 Send
               </button>
             </div>
