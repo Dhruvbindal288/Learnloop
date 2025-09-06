@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
+import form from "../assets/form.png";
 
 function OnBoardPage() {
   const { authUser } = useAuth();
@@ -26,7 +26,6 @@ function OnBoardPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-  
     const formattedData = {
       learningSkill: onboardData.learningSkill
         .split(",")
@@ -42,8 +41,9 @@ function OnBoardPage() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gradient-to-r from-indigo-300 to-blue-300">
-      <div className="w-96 bg-white p-8 rounded-2xl shadow-lg">
+    <div className="h-screen flex flex-col-reverse lg:flex-row items-center justify-center bg-gradient-to-r from-indigo-300 to-blue-300 px-4">
+     
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
           Complete Your Onboarding
         </h2>
@@ -66,7 +66,7 @@ function OnBoardPage() {
             />
           </div>
 
-         
+    
           <div>
             <label
               htmlFor="learningSkill"
@@ -80,12 +80,16 @@ function OnBoardPage() {
               placeholder="e.g. React, Node.js, Python"
               value={onboardData.learningSkill}
               onChange={(e) =>
-                setOnboardData({ ...onboardData, learningSkill: e.target.value })
+                setOnboardData({
+                  ...onboardData,
+                  learningSkill: e.target.value,
+                })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
             />
           </div>
 
+          
           <div>
             <label
               htmlFor="teachingSkill"
@@ -99,13 +103,16 @@ function OnBoardPage() {
               placeholder="e.g. JavaScript, SQL, Data Analysis"
               value={onboardData.teachingSkill}
               onChange={(e) =>
-                setOnboardData({ ...onboardData, teachingSkill: e.target.value })
+                setOnboardData({
+                  ...onboardData,
+                  teachingSkill: e.target.value,
+                })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
             />
           </div>
 
-          
+         
           <button
             type="submit"
             className="w-full py-2 rounded-xl bg-blue-500 text-white font-semibold hover:bg-blue-600 transition duration-300 shadow-md"
@@ -114,6 +121,15 @@ function OnBoardPage() {
             {isPending ? "Saving your data..." : "Save & Continue"}
           </button>
         </form>
+      </div>
+
+     
+      <div className="flex justify-center lg:ml-12 mb-6 lg:mb-0">
+        <img
+          src={form}
+          alt="Onboarding illustration"
+          className="w-72 sm:w-96 lg:w-[28rem] object-contain"
+        />
       </div>
     </div>
   );

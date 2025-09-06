@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import login from "../assets/login.png";
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -13,16 +15,16 @@ function Login() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (data) => {
-    const response=await axiosInstance.post('/auth/login',data)
-     return response.data;
+      const response = await axiosInstance.post("/auth/login", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["authUser"]);
-      toast.success('Login Successfully')
+      toast.success("Login Successfully");
     },
-    onError:(error)=>{
-      toast.error(error.response.data.message)
-    }
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
   });
 
   const handleSubmit = (e) => {
@@ -31,14 +33,14 @@ function Login() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-blue-200 ">
-      <div className="w-96 bg-white p-8 rounded-2xl shadow-2xl">
+    <div className="h-screen flex flex-col-reverse lg:flex-row items-center justify-center bg-blue-200 px-4 lg:px-20">
+    
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
           Welcome back!!
         </h2>
 
         <form className="space-y-8" onSubmit={handleSubmit}>
-         
           <div>
             <label
               htmlFor="email"
@@ -56,10 +58,10 @@ function Login() {
               onChange={(e) =>
                 setLoginData({ ...loginData, email: e.target.value })
               }
+              required
             />
           </div>
 
-         
           <div>
             <label
               htmlFor="password"
@@ -77,10 +79,10 @@ function Login() {
               onChange={(e) =>
                 setLoginData({ ...loginData, password: e.target.value })
               }
+              required
             />
           </div>
 
-       
           <button
             type="submit"
             className="w-full py-2 rounded-xl bg-blue-500 text-white font-semibold hover:bg-blue-600 transition duration-300 shadow-md"
@@ -88,6 +90,25 @@ function Login() {
             Login
           </button>
         </form>
+
+        <p className="text-sm text-gray-600 text-center mt-6">
+          Don’t have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-500 font-semibold hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
+      </div>
+
+      
+      <div className="flex justify-center items-center w-full lg:w-1/2 mb-8 lg:mb-0">
+        <img
+          src={login}
+          alt="Login Illustration"
+          className="max-w-xs sm:max-w-sm lg:max-w-md w-full"
+        />
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ function Sidebar({onSelectFriend}) {
             <div className="flex flex-col">
               <span className="font-medium text-gray-800">{friend.fullName}</span>
               <span className="text-sm text-gray-500">
-               Teaching - {friend.teachingSkill || "No skill set"}
+               Teaching - {friend.teachingSkill.join(" , ") || "No skill set"}
               </span>
             </div>
           </button>

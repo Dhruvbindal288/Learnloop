@@ -49,10 +49,15 @@ export const sendRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-   
-    const existing = await Request.findOne({ senderId, receiverId, status: "pending" });
+    const existing = await Request.findOne({
+      $or: [
+        { senderId, receiverId, status: "pending" },
+        { senderId: receiverId, receiverId: senderId, status: "pending" }
+      ]
+    });
+
     if (existing) {
-      return res.status(400).json({ message: "Request already sent" });
+      return res.status(400).json({ message: "Request already exists between these users" });
     }
 
     const request = await Request.create({ senderId, receiverId });
@@ -64,7 +69,8 @@ export const sendRequest = async (req, res) => {
     console.error("Error in sendRequest:", error);
     return res.status(500).json({ message: "Server error" });
   }
-};  
+};
+
 
 
 export const acceptRequest = async (req, res) => {

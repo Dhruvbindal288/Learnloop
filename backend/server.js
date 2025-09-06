@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
     console.log(`User ${userId} joined their room`);
   });
 
-  // Send message
+
   socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
     try {
       if (!message?.trim()) return;
@@ -61,28 +61,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // ----------------------
-  // WebRTC Signaling
-  // ----------------------
-
-  // User A calls User B
-  socket.on("call-user", ({ offer, to }) => {
-    io.to(to).emit("call-made", { offer, from: socket.id });
-  });
-
-  // User B answers
-  socket.on("make-answer", ({ answer, to }) => {
-    io.to(to).emit("answer-made", { answer });
-  });
-
-  // ICE candidate exchange
-  socket.on("ice-candidate", ({ candidate, to }) => {
-    io.to(to).emit("ice-candidate", { candidate });
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
-  });
+ 
 });
 
 // Start server

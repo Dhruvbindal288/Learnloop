@@ -7,7 +7,7 @@ const { data: authUser, isLoading, isError, error }= useQuery({
   queryFn:async()=>{
     const response=await axiosInstance.get('/auth/me');
     return response.data
-  },retry:false
+  },retry:false,
 }) 
 return {authUser,isLoading,isError,error}
 }

@@ -4,7 +4,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import BrowseSkills from "./pages/BrowseSkills";
 import OnBoardPage from "./pages/OnBoardPage";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -13,10 +13,10 @@ import Chat from "./pages/Chat";
 import { Toaster } from "react-hot-toast";
 import socket from "./lib/socket";
 import png from "./assets/404.png";
-import VideoCallPage from "./pages/VideoCallPage";
-import Profile from "./pages/Profile";
+
 function App() {
   const { authUser, isLoading } = useAuth();
+  const location = useLocation();
 
   React.useEffect(() => {
     if (authUser?._id) {
@@ -27,70 +27,53 @@ function App() {
 
   if (isLoading) return <div>Loading...</div>;
 
+  // Paths where Navbar & Footer should be hidden
+  const hideLayout = ["/login", "/signup", "/onboard"].includes(location.pathname);
+
   return (
     <div>
-      <Navbar />
+      {!hideLayout && <Navbar />}
       <Toaster />
       <Routes>
-       
         <Route path="/" element={<Home />} />
 
-     
-       <Route
-  path="/login"
-  element={
-    authUser ? (
-      authUser.onBoarded ? (
-        <Navigate to="/" />
-      ) : (
-        <Navigate to="/onboard" />
-      )
-    ) : (
-      <Login />
-    )
-  }
-/>
-<Route
-  path="/signup"
-  element={
-    authUser ? (
-      authUser.onBoarded ? (
-        <Navigate to="/" />
-      ) : (
-        <Navigate to="/onboard" />
-      )
-    ) : (
-      <Signup />
-    )
-  }
-/>
+        <Route
+          path="/login"
+          element={
+            authUser ? (
+              authUser.onBoarded ? <Navigate to="/" /> : <Navigate to="/onboard" />
+            ) : (
+              <Login />
+            )
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            authUser ? (
+              authUser.onBoarded ? <Navigate to="/" /> : <Navigate to="/onboard" />
+            ) : (
+              <Signup />
+            )
+          }
+        />
 
-       
         <Route
           path="/onboard"
           element={
             authUser ? (
-              authUser.onBoarded ? (
-                <Navigate to="/" />
-              ) : (
-                <OnBoardPage />
-              )
+              authUser.onBoarded ? <Navigate to="/" /> : <OnBoardPage />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
 
-      
         <Route
           path="/browse"
           element={
             authUser ? (
-              authUser.onBoarded ? (
-                <BrowseSkills />
-              ) : (
-                <Navigate to="/onboard" />
-              )
+              authUser.onBoarded ? <BrowseSkills /> : <Navigate to="/onboard" />
             ) : (
               <Navigate to="/login" />
             )
@@ -100,11 +83,7 @@ function App() {
           path="/notifications"
           element={
             authUser ? (
-              authUser.onBoarded ? (
-                <Notification />
-              ) : (
-                <Navigate to="/onboard" />
-              )
+              authUser.onBoarded ? <Notification /> : <Navigate to="/onboard" />
             ) : (
               <Navigate to="/login" />
             )
@@ -114,69 +93,34 @@ function App() {
           path="/chat"
           element={
             authUser ? (
-              authUser.onBoarded ? (
-                <Chat />
-              ) : (
-                <Navigate to="/onboard" />
-              )
+              authUser.onBoarded ? <Chat /> : <Navigate to="/onboard" />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
-        <Route
-  path="/video-call/:friendId"  
-  element={
-    authUser ? (
-      authUser.onBoarded ? (
-        <VideoCallPage />
-      ) : (
-        <Navigate to="/onboard" />
-      )
-    ) : (
-      <Navigate to="/login" />
-    )
-  }
-/>
-
-<Route
-  path="/profile"
-  element={
-    authUser ? (
-      authUser.onBoarded ? (
-        <Profile />
-      ) : (
-        <Navigate to="/onboard" />
-      )
-    ) : (
-      <Navigate to="/login" />
-    )
-  }
-/>
 
         <Route
           path="*"
           element={
-            
-            
- <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", 
-      }}
-    >
-      <img
-        src={png}
-        alt="Page Not Found"
-        style={{ width: "60%", height: "auto" ,paddingTop:"150px"}} 
-      />
-    </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+              }}
+            >
+              <img
+                src={png}
+                alt="Page Not Found"
+                style={{ width: "60%", height: "auto", paddingTop: "150px" }}
+              />
+            </div>
           }
         />
       </Routes>
-      <Footer />
+      {!hideLayout && <Footer />}
     </div>
   );
 }

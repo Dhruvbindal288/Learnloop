@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
@@ -12,7 +11,8 @@ function BrowseSkills() {
     },
   });
 
-  const queryClient = useQueryClient();
+
+const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (id) => {
@@ -41,7 +41,7 @@ function BrowseSkills() {
         Browse Skills
       </h2>
 
-      {users.length > 0 ? (
+      {users.length > 0 ? ( 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {users.map((user) => (
             <div
