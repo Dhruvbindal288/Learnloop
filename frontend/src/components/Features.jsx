@@ -24,7 +24,7 @@ const features = [
   return (
     <div className="py-12 px-6 bg-gradient-to-r from-blue-50 to-indigo-100">
       <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-800 mb-10">
-        Why SkillSync?
+        Why LearnLoop?
       </h1>
 
       <div className="flex flex-wrap justify-center gap-8">

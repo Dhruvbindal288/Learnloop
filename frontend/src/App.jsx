@@ -27,7 +27,7 @@ function App() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  // Paths where Navbar & Footer should be hidden
+ 
   const hideLayout = ["/login", "/signup", "/onboard"].includes(location.pathname);
 
   return (
@@ -99,6 +99,8 @@ function App() {
             )
           }
         />
+        
+
 
         <Route
           path="*"
