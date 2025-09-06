@@ -12,4 +12,5 @@ router.get('/allusers',protectRoute,getUsers)
 router.get('/friends',protectRoute,getFriends)
 router.get('/requests',protectRoute,getRequests)
 
+
 export default router;

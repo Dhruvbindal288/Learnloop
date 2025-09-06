@@ -118,4 +118,4 @@ const queryClient = useQueryClient();
   );
 }
 
-export default BrowseSkills;
+export default BrowseSkills; 
