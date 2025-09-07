@@ -13,7 +13,7 @@ import Chat from "./pages/Chat";
 import { Toaster } from "react-hot-toast";
 import socket from "./lib/socket";
 import png from "./assets/404.png";
-
+import VideoCallPage from "./pages/VideoCallPage";
 function App() {
   const { authUser, isLoading } = useAuth();
   const location = useLocation();
@@ -68,6 +68,17 @@ function App() {
             )
           }
         />
+
+<Route
+  path="/video-call"
+  element={
+    authUser ? (
+      authUser.onBoarded ? <VideoCallPage /> : <Navigate to="/onboard" />
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
         <Route
           path="/browse"

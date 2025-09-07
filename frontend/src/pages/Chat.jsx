@@ -5,13 +5,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import socket from "../lib/socket"; 
 import useAuth from "../hooks/useAuth";
 import { FaVideo } from "react-icons/fa";
-// import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; 
 
 function Chat() {
   const [selectedFriend, setSelectedFriend] = React.useState(null);
   const { authUser } = useAuth();
   const queryClient = useQueryClient();
-  // const navigate = useNavigate(); 
+  const navigate = useNavigate(); 
 
   const { data: messages = [], isLoading } = useMessages(selectedFriend?._id);
 
@@ -48,7 +48,10 @@ function Chat() {
   };
 
   
-
+const startCall = () => {
+  if (!selectedFriend) return;
+  navigate("/video-call", { state: { friendId: selectedFriend._id } });
+};
  
   return (
     <div className="flex h-[calc(100vh-64px)] pt-16 bg-gradient-to-br from-indigo-50 via-indigo-100 to-blue-50">
@@ -69,7 +72,7 @@ function Chat() {
               </div>
               <div className="w-full flex items-center justify-between">
                 <h2 className="text-lg font-bold text-black-800 truncate">{selectedFriend.fullName}</h2>
-                {/* <button onClick={startCall}><FaVideo size={26} color="black" /></button> */}
+                <button onClick={startCall}><FaVideo size={26} color="black" /></button>
               </div>
             </div>
 
